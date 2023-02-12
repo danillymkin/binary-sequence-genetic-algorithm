@@ -8,7 +8,9 @@ A genetic algorithm for searching for a binary code sequence with specified para
 ## Installation
 
 Install [Python](https://www.python.org/) v3 to run.
+
 Clone the repository.
+
 Install the dependencies.
 
 ```sh
