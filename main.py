@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 
 from constants import POPULATION_SIZE, CROSSOVER_PROBABILITY, MUTATION_PROBABILITY, CODE_SEQUENCE_LENGTH
 from individual import calc_individual_fitness
-from population import create_population
+from population import Population
 from utils import tournament, clone, crossover, mutation
 
 
 def main():
-    population = create_population(POPULATION_SIZE)
+    population = Population.create(POPULATION_SIZE)
 
     fitness_values = list(map(calc_individual_fitness, population))
 
