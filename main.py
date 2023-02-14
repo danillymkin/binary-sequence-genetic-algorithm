@@ -1,21 +1,11 @@
-import random
 import matplotlib.pyplot as plt
 
-from constants import POPULATION_SIZE, CROSSOVER_PROBABILITY, MUTATION_PROBABILITY, CODE_SEQUENCE_LENGTH
-from individual import calc_individual_fitness
+from constants import POPULATION_SIZE
 from population import Population
-from utils import tournament, clone, crossover, mutation
 
 
 def main():
-    population = Population.create(POPULATION_SIZE)
-
-    fitness_values = list(map(calc_individual_fitness, population))
-
-    for individual, fitness_value in zip(population, fitness_values):
-        individual.fitness.values = [fitness_value]
-
-    fitness_values = [individual.fitness.values[0] for individual in population]
+    population = Population.generate(POPULATION_SIZE)
 
     max_fitness_values = []
     mean_fitness_values = []
@@ -26,28 +16,14 @@ def main():
     while generation_counter < 100:
         generation_counter += 1
 
-        # selective selection
-        offspring = tournament(population)
-        offspring = list(map(clone, offspring))
+        offspring = population.tournament()
+        offspring.crossover()
+        offspring.mutation()
 
-        # crossover even and odd individuals
-        for individual1, individual2 in zip(offspring[::2], offspring[1::2]):
-            if random.random() < CROSSOVER_PROBABILITY:
-                crossover(individual1, individual2)
+        offspring.update_fitness_values()
 
-        # mutation
-        for individual in offspring:
-            if random.random() < MUTATION_PROBABILITY:
-                mutation(individual, 1.0 / CODE_SEQUENCE_LENGTH)
-
-        # calculate the fitness of the offspring
-        offspring_fitness_values = map(calc_individual_fitness, offspring)
-        for individual, fitness_value in zip(offspring, offspring_fitness_values):
-            individual.fitness.values = [fitness_value]
-
-        # update the population and the list of its fitness
         population[:] = offspring
-        fitness_values = [individual.fitness.values[0] for individual in population]
+        fitness_values = [individual.fitness_value for individual in population]
 
         # statistics
         max_fitness = max(fitness_values)
