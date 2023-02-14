@@ -1,4 +1,4 @@
-from individual import create_individual
+from individual import Individual
 
 
 class Population(list):
@@ -7,4 +7,4 @@ class Population(list):
 
 
 def create_population(size=0):
-    return Population([create_individual() for i in range(size)])
+    return Population([Individual.create() for i in range(size)])

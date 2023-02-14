@@ -9,17 +9,14 @@ class Individual(list):
         super().__init__(*args)
         self.fitness = FitnessMax()
 
-
-def create_individual():
-    return Individual([random.randrange(-1, 2, 2) for i in range(CODE_SEQUENCE_LENGTH)])
+    @staticmethod
+    def create():
+        return Individual([random.randrange(-1, 2, 2) for i in range(CODE_SEQUENCE_LENGTH)])
 
 
 def calc_individual_fitness(individual: Individual):
     acf = calc_individual_acf(individual)
     psl = get_individual_psl(acf)
-
-    # if psl > 5:
-    #     return 0
 
     return CODE_SEQUENCE_LENGTH / psl
 
