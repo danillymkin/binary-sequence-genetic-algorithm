@@ -17,10 +17,11 @@ def main():
 
     generation_counter = 0
 
-    while generation_counter < 100:
+    while generation_counter < 500:
         generation_counter += 1
 
-        offspring = population.tournament()
+        # offspring = population.tournament()
+        offspring = population.roulette()
         offspring.crossover()
         offspring.mutation()
 

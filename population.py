@@ -40,6 +40,21 @@ class Population(list):
         offspring = Population(list(map(Individual.clone, offspring_list)))
         return offspring
 
+    def roulette(self):
+        offspring_list = []
+        population_len = len(self)
+
+        fitness_list = [individual.calc_fitness() for individual in self]
+        total_fitness = sum(fitness_list)
+        selection_probabilities = [fitness / total_fitness for fitness in fitness_list]
+
+        for i in range(population_len):
+            selected_index = random.choices(range(population_len), selection_probabilities)[0]
+            offspring_list.append(self[selected_index])
+
+        offspring = Population(list(map(Individual.clone, offspring_list)))
+        return offspring
+
     def update_fitness_values(self):
         for individual in self:
             individual.fitness_value = individual.calc_fitness()
