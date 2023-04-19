@@ -19,11 +19,8 @@ class Individual(list):
         return individual
 
     def mutation(self):
-        probability_gene_mutation = 1.0 / CODE_SEQUENCE_LENGTH
-
-        for i in range(len(self)):
-            if random.random() < probability_gene_mutation:
-                self[i] = -1 if self[i] == 1 else 1
+        gene_for_mutation = random.randint(0, CODE_SEQUENCE_LENGTH - 1)
+        self[gene_for_mutation] = -1 if self[gene_for_mutation] == 1 else 1
 
     def calc_fitness(self):
         acf = self.calc_acf()
