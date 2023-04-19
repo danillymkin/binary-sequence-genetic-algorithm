@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import csv
 
 from constants import POPULATION_SIZE, CODE_SEQUENCE_LENGTH
 from individual import Individual
@@ -17,11 +18,13 @@ def main():
 
     generation_counter = 0
 
-    while generation_counter < 500:
+    while generation_counter < 50:
         generation_counter += 1
 
-        # offspring = population.tournament()
-        offspring = population.roulette()
+        # you can use roulette method, just uncomment bellow line and delete tournament line
+        # offspring = population.roulette()
+
+        offspring = population.tournament()
         offspring.crossover()
         offspring.mutation()
 
@@ -36,12 +39,17 @@ def main():
         max_fitness_values.append(max_fitness)
         mean_fitness_values.append(mean_fitness)
         best_index = fitness_values.index(max(fitness_values))
+        best_acf = population[best_index].calc_acf()
+        best_psl = population[best_index].calc_psl(best_acf)
 
         if max_fitness > best_fitness:
             best_fitness = max_fitness
             best_individual = Individual.clone(population[best_index])
 
-        print(f"The population {generation_counter}: Max fitness = {max_fitness}, Mean fitness = {mean_fitness}")
+        if generation_counter == 1 or generation_counter == 3 or generation_counter == 50:
+            write_population_to_csv(generation_counter, population)
+
+        print(f"The population {generation_counter}: Max fitness = {max_fitness}, Mean fitness = {mean_fitness}, PSL = {best_psl}")
         print("The best individual = ", *population[best_index], "\n")
 
     # charts
@@ -71,6 +79,24 @@ def show_acf_graph(individual):
     plt.grid(True)
     plt.plot(y, acf)
     plt.show()
+
+
+def write_population_to_csv(population_number, population):
+    mode = 'w' if population_number == 1 else 'a'
+    with open('populations.csv', mode) as csv_file:
+        writer = csv.writer(csv_file, delimiter=';')
+
+        if population_number == 1:
+            writer.writerow(['population_number', 'individual', 'PSL'])
+
+        for individual in population:
+            acf = individual.calc_acf()
+            psl = individual.calc_psl(acf)
+
+            data = [population_number, individual, psl]
+            writer.writerow(data)
+
+    csv_file.close()
 
 
 if __name__ == "__main__":
