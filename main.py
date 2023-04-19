@@ -87,13 +87,13 @@ def write_population_to_csv(population_number, population):
         writer = csv.writer(csv_file, delimiter=';')
 
         if population_number == 1:
-            writer.writerow(['population_number', 'individual', 'PSL'])
+            writer.writerow(['population_number', 'number in population', 'individual', 'PSL'])
 
-        for individual in population:
+        for index, individual in enumerate(population):
             acf = individual.calc_acf()
             psl = individual.calc_psl(acf)
 
-            data = [population_number, individual, psl]
+            data = [population_number, index + 1, individual, psl]
             writer.writerow(data)
 
     csv_file.close()
